@@ -36,7 +36,7 @@ class LoginView extends StatelessWidget {
                 AppTextFormField(
                   controller: passwordController,
                   hintText: "Password",
-                  obscureText: true,
+                  obscureText: false,
                 ),
                 const SizedBox(height: 10.0),
                 AppSolidButton(

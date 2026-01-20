@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:my_clean_code_template/core/di/service_locator.dart';
 import 'package:my_clean_code_template/core/navigation/app_router.dart';
+import 'package:my_clean_code_template/core/navigation/app_routes.dart';
 import 'package:my_clean_code_template/core/navigation/navigation_service.dart';
 import 'package:my_clean_code_template/ui/auth/login/bloc/login_bloc.dart';
 import 'package:my_clean_code_template/ui/auth/login/view/login_view.dart';
+import 'package:my_clean_code_template/ui/profile/cubit/profile_cubit.dart';
+import 'package:my_clean_code_template/ui/splash_screen/cubit/splash_cubit.dart';
+import 'package:my_clean_code_template/ui/splash_screen/view/splash_screen_view.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await setupServiceLocator();
   runApp(const MyApp());
 }
 
@@ -16,14 +23,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [BlocProvider(create: (context) => LoginBloc())],
+      providers: [
+        BlocProvider(create: (context) => SplashCubit()..checkSession()),
+        BlocProvider(create: (context) => ProfileCubit()..getProfile()),
+        BlocProvider(create: (context) => LoginBloc()),
+      ],
       child: MaterialApp(
         navigatorKey: NavigationService.navigatorKey,
         onGenerateRoute: AppRouter.onGenerateRoute,
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(),
-        home: LoginView(),
+        home: SplashScreenView(),
       ),
     );
   }

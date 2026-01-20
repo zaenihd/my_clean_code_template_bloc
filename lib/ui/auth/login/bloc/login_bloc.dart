@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:my_clean_code_template/core/di/service_locator.dart';
 import 'package:my_clean_code_template/core/navigation/app_routes.dart';
 import 'package:my_clean_code_template/core/navigation/navigation_service.dart';
 import 'package:my_clean_code_template/core/network/api_exception.dart';
@@ -7,6 +10,7 @@ import 'package:my_clean_code_template/core/widget/app_notifier.dart';
 import 'package:my_clean_code_template/data/model/login_model.dart';
 import 'package:my_clean_code_template/data/model/profile_model.dart';
 import 'package:my_clean_code_template/data/repository/auth_repository.dart';
+import 'package:my_clean_code_template/data/storage/app_shared.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
@@ -28,7 +32,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         );
         emit(state.copyWith(profileData: responseProfile));
         emit(state.copyWith(isLoading: false));
-        NavigationService.pushReplacementNamed(AppRoutes.profile, args: responseProfile);
+        sl<AppPreferences>().saveToken(token: responseLogin.token);
+        sl<AppPreferences>().saveProfile(
+          json.decode(responseProfile.toString()),
+        );
+        NavigationService.pushReplacementNamed(
+          AppRoutes.profile,
+        );
       } on ApiException catch (e) {
         emit(state.copyWith(isLoading: false));
         AppNotifier.showError("disini" + e.message);
