@@ -27,24 +27,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           password: event.password,
         );
         emit(state.copyWith(dataLogin: responseLogin.data));
-        final ProfileData responseProfile = await authRepository.getProfile(
-          responseLogin.token,
-        );
-        emit(state.copyWith(profileData: responseProfile));
         emit(state.copyWith(isLoading: false));
         sl<AppPreferences>().saveToken(token: responseLogin.token);
-        sl<AppPreferences>().saveProfile(
-          json.decode(responseProfile.toString()),
-        );
-        NavigationService.pushReplacementNamed(
-          AppRoutes.profile,
-        );
+        NavigationService.pushReplacementNamed(AppRoutes.profile);
       } on ApiException catch (e) {
         emit(state.copyWith(isLoading: false));
-        AppNotifier.showError("disini" + e.message);
+        AppNotifier.showError("${e.statusCode} : ${e.message}");
       } catch (e) {
         emit(state.copyWith(isLoading: false));
-        AppNotifier.showError(e.toString());
+        AppNotifier.showError("aaaas".toString());
 
         print(e.toString());
       }

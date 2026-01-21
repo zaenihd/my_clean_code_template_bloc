@@ -1,5 +1,3 @@
-
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:my_clean_code_template/core/di/service_locator.dart';
@@ -8,17 +6,19 @@ import 'package:my_clean_code_template/data/storage/app_shared.dart';
 part 'splash_state.dart';
 
 class SplashCubit extends Cubit<SplashState> {
-  SplashCubit() : super(SplashInitial());
+  final AppPreferences prefs;
 
-  String? token = sl<AppPreferences>().token;
+  SplashCubit(this.prefs) : super(SplashInitial());
 
   Future<void> checkSession() async {
-    await Future.delayed(Duration(seconds: 3));
-    print(token.toString());
-    if (token == null || token == "") {
-      emit(SplashUnauthenticated());
-    } else {
+    await Future.delayed(const Duration(seconds: 2)); // animasi splash
+
+    final token = prefs.token;
+
+    if (token.isNotEmpty) {
       emit(SplashAuthenticated());
+    } else {
+      emit(SplashUnauthenticated());
     }
   }
 }

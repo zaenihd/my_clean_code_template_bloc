@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => SplashCubit()..checkSession()),
-        BlocProvider(create: (context) => ProfileCubit()..getProfile()),
+        BlocProvider(create: (context) => sl<SplashCubit>()..checkSession()),
+        BlocProvider(create: (context) => sl<ProfileCubit>()..loadProfile()),
         BlocProvider(create: (context) => LoginBloc()),
       ],
       child: MaterialApp(

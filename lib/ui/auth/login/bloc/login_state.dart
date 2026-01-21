@@ -4,12 +4,11 @@ part of 'login_bloc.dart';
 class LoginState extends Equatable {
   bool isLoading;
   LoginData? dataLogin;
-  ProfileData? profileData;
   String? errorMessage;
-  LoginState({this.isLoading = false, this.dataLogin, this.errorMessage, this.profileData});
+  LoginState({this.isLoading = false, this.dataLogin, this.errorMessage});
 
   @override
-  List<Object?> get props => [isLoading, dataLogin, errorMessage, profileData];
+  List<Object?> get props => [isLoading, dataLogin, errorMessage];
 
   LoginState copyWith({
     bool? isLoading,
@@ -21,7 +20,6 @@ class LoginState extends Equatable {
       isLoading: isLoading ?? this.isLoading,
       dataLogin: dataLogin ?? this.dataLogin,
       errorMessage: errorMessage ?? this.errorMessage,
-      profileData: profileData ?? this.profileData,
     );
   }
 }

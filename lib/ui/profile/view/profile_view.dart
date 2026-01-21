@@ -12,16 +12,46 @@ class ProfileView extends StatelessWidget {
     return Scaffold(
       body: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
-          return Column(
-            children: [
-              Txt("Profile", fontSize: 40, fontWeight: FontWeight.bold),
-              const SizedBox(height: 20.0),
-              // ListTile(
-              //   leading: Image.network(profileData.client[0].image),
-              //   title: Txt(profileData.name),
-              // ),
-            ],
-          );
+          if (state.isLoading == true) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state.profileData != null) {
+            return Padding(
+              padding: .symmetric(horizontal: 20, vertical: 50),
+              child: Column(
+                children: [
+                  Txt("Profile", fontSize: 40, fontWeight: FontWeight.bold),
+                  const SizedBox(height: 20.0),
+                  ListTile(
+                    leading: Image.network(state.profileData!.client[0].image),
+                    title: Txt(state.profileData!.name),
+                  ),
+                  const SizedBox(
+                    height: 30.0,
+                  ),
+                  Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  context.read<ProfileCubit>().loadProfile();
+                },
+                child: Text(state.errorMessage!),
+              ),
+            )
+                ],
+              ),
+            );
+          }
+          if (state.errorMessage != null) {
+            return Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  context.read<ProfileCubit>().loadProfile();
+                },
+                child: Text(state.errorMessage!),
+              ),
+            );
+          }
+          return SizedBox();
         },
       ),
     );

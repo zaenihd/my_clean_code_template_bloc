@@ -1,7 +1,12 @@
 import 'dart:convert';
 
+/* ===================== HELPERS ===================== */
+
 ProfileModel profileModelFromJson(String str) =>
     ProfileModel.fromJson(json.decode(str));
+
+String profileModelToJson(ProfileModel data) =>
+    json.encode(data.toJson());
 
 DateTime? parseDate(dynamic value) {
   if (value == null || value.toString().isEmpty) return null;
@@ -27,10 +32,16 @@ class ProfileModel {
         code: json["code"] ?? 0,
         success: json["success"] ?? false,
         message: json["message"] ?? '',
-        data: json["data"] == null
-            ? null
-            : ProfileData.fromJson(json["data"]),
+        data:
+            json["data"] == null ? null : ProfileData.fromJson(json["data"]),
       );
+
+  Map<String, dynamic> toJson() => {
+        "code": code,
+        "success": success,
+        "message": message,
+        "data": data?.toJson(),
+      };
 }
 
 /* ===================== PROFILE DATA ===================== */
@@ -81,6 +92,20 @@ class ProfileData {
                 .toList() ??
             [],
       );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "email": email,
+        "email_verified_at": emailVerifiedAt?.toIso8601String(),
+        "role": role,
+        "status": status,
+        "otp": otp,
+        "created_at": createdAt?.toIso8601String(),
+        "updated_at": updatedAt?.toIso8601String(),
+        "client": client.map((e) => e.toJson()).toList(),
+        "card_ak1": cardAk1.map((e) => e.toJson()).toList(),
+      };
 }
 
 /* ===================== CARD AK1 ===================== */
@@ -122,6 +147,19 @@ class CardAk1 {
         status: json["status"] ?? '',
         address: json["address"] ?? '',
       );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "user_id": userId,
+        "full_name": fullName,
+        "place_of_birth": placeOfBirth,
+        "date_of_birth": dateOfBirth?.toIso8601String(),
+        "gender": gender,
+        "religion": religion,
+        "nik": nik,
+        "status": status,
+        "address": address,
+      };
 }
 
 /* ===================== CLIENT ===================== */
@@ -195,19 +233,37 @@ class Client {
                 ?.map((e) => Education.fromJson(e))
                 .toList() ??
             [],
-        cv: (json["cv"] as List?)
-                ?.map((e) => Cv.fromJson(e))
-                .toList() ??
-            [],
-        skills: (json["skills"] as List?)
-                ?.map((e) => Skill.fromJson(e))
-                .toList() ??
-            [],
+        cv: (json["cv"] as List?)?.map((e) => Cv.fromJson(e)).toList() ?? [],
+        skills:
+            (json["skills"] as List?)?.map((e) => Skill.fromJson(e)).toList() ??
+                [],
         language: (json["language"] as List?)
                 ?.map((e) => Language.fromJson(e))
                 .toList() ??
             [],
       );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "user_name": userName,
+        "gender": gender,
+        "birth_date": birthDate?.toIso8601String(),
+        "phone": phone,
+        "province": province,
+        "subdistrict": subdistrict,
+        "address": address,
+        "image": image,
+        "age": age,
+        "high": high,
+        "description": description,
+        "noAk1": noAk1,
+        "education": education.map((e) => e.toJson()).toList(),
+        "experience": experience.map((e) => e.toJson()).toList(),
+        "last_education": lastEducation.map((e) => e.toJson()).toList(),
+        "cv": cv.map((e) => e.toJson()).toList(),
+        "skills": skills.map((e) => e.toJson()).toList(),
+        "language": language.map((e) => e.toJson()).toList(),
+      };
 }
 
 /* ===================== CV ===================== */
@@ -225,6 +281,11 @@ class Cv {
         id: json["id"] ?? 0,
         cv: json["cv"] ?? '',
       );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "cv": cv,
+      };
 }
 
 /* ===================== EDUCATION ===================== */
@@ -254,6 +315,15 @@ class Education {
         graduationYear: json["graduation_year"] ?? '',
         ipk: json["ipk"],
       );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "grade": grade,
+        "university": university,
+        "major": major,
+        "graduation_year": graduationYear,
+        "ipk": ipk,
+      };
 }
 
 /* ===================== EXPERIENCE ===================== */
@@ -283,6 +353,15 @@ class Experience {
         salary: json["salary"] ?? '',
         description: json["description"],
       );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "company": company,
+        "position": position,
+        "duration": duration,
+        "salary": salary,
+        "description": description,
+      };
 }
 
 /* ===================== SKILL ===================== */
@@ -306,6 +385,13 @@ class Skill {
         issueBy: json["issue_by"] ?? '',
         description: json["description"] ?? '',
       );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name_training": nameTraining,
+        "issue_by": issueBy,
+        "description": description,
+      };
 }
 
 /* ===================== LANGUAGE ===================== */
@@ -326,4 +412,10 @@ class Language {
         language: json["language"] ?? '',
         level: json["level"] ?? '',
       );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "language": language,
+        "level": level,
+      };
 }
