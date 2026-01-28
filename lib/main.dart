@@ -7,6 +7,7 @@ import 'package:my_clean_code_template/core/navigation/navigation_service.dart';
 import 'package:my_clean_code_template/ui/auth/login/bloc/login_bloc.dart';
 import 'package:my_clean_code_template/ui/auth/login/view/login_view.dart';
 import 'package:my_clean_code_template/ui/home/bloc/home_bloc.dart';
+import 'package:my_clean_code_template/ui/ktp_scan/cubit/ktp_cubit.dart';
 import 'package:my_clean_code_template/ui/main/view/main_view.dart';
 import 'package:my_clean_code_template/ui/profile/cubit/profile_cubit.dart';
 import 'package:my_clean_code_template/ui/splash_screen/cubit/splash_cubit.dart';
@@ -28,8 +29,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => sl<SplashCubit>()..checkSession()),
         BlocProvider(create: (context) => sl<ProfileCubit>()..loadProfile()),
-        BlocProvider(create: (context) => LoginBloc()),
-        BlocProvider(create: (context) => sl<HomeBloc>()..add(FetchLowongan()),)
+        BlocProvider(create: (context) => sl<LoginBloc>()),
+        BlocProvider(create: (context) => sl<HomeBloc>()..add(FetchLowongan())),
+        BlocProvider(create: (context) => sl<KtpCubit>()),
       ],
       child: MaterialApp(
         navigatorKey: NavigationService.navigatorKey,
@@ -37,7 +39,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(),
-        home: ButtonNavigationView(),
+        home: SplashScreenView(),
       ),
     );
   }

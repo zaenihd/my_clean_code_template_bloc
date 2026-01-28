@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_clean_code_template/ui/auth/login/view/login_view.dart';
 import 'package:my_clean_code_template/ui/home/view/home_view.dart';
+import 'package:my_clean_code_template/ui/ktp_scan/view/ktp_scan_page.dart';
 import 'package:my_clean_code_template/ui/profile/view/profile_view.dart';
 
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
@@ -43,7 +44,7 @@ class ButtonNavigationView extends StatelessWidget {
           HomeView(),
           // InputPinView(),
           ProfileView(),
-          HomeView(),
+          KtpScanPage(),
           LoginView(),
         ],
         onItemSelected: (value) {},

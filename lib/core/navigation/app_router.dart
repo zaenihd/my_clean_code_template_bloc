@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_clean_code_template/data/model/profile_model.dart';
 import 'package:my_clean_code_template/ui/auth/login/view/login_view.dart';
+import 'package:my_clean_code_template/ui/detail_lowongan/view/detail_lowongan_view.dart';
 import 'package:my_clean_code_template/ui/home/view/home_view.dart';
+import 'package:my_clean_code_template/ui/ktp_scan/view/ktp_scan_page.dart';
+import 'package:my_clean_code_template/ui/main/view/main_view.dart';
 import 'package:my_clean_code_template/ui/profile/view/profile_view.dart';
 import 'package:my_clean_code_template/ui/splash_screen/view/splash_screen_view.dart';
 import 'app_routes.dart';
@@ -16,12 +19,15 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const HomeView());
 
       case AppRoutes.profile:
-        return MaterialPageRoute(
-          builder: (_) =>
-              ProfileView(),
-        );
+        return MaterialPageRoute(builder: (_) => ProfileView());
       case AppRoutes.splash:
         return MaterialPageRoute(builder: (_) => SplashScreenView());
+      case AppRoutes.mainPgae:
+        return MaterialPageRoute(builder: (_) => ButtonNavigationView());
+      case AppRoutes.ktpScan:
+        return MaterialPageRoute(builder: (_) => KtpScanPage());
+      case AppRoutes.detailLowongan:
+        return MaterialPageRoute(builder: (_) => DetailLowonganView(id: settings.arguments as int,));
 
       default:
         return _errorRoute();

@@ -34,7 +34,7 @@ class ProfileView extends StatelessWidget {
                 onPressed: () {
                   context.read<ProfileCubit>().loadProfile();
                 },
-                child: Text(state.errorMessage!),
+                child: Text("state.errorMessage"),
               ),
             )
                 ],

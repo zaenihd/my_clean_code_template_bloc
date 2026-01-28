@@ -23,7 +23,7 @@ class _SplashScreenViewState extends State<SplashScreenView> {
       body: BlocListener<SplashCubit, SplashState>(
         listener: (context, state) {
           if (state is SplashAuthenticated) {
-            NavigationService.pushReplacementNamed(AppRoutes.profile);
+            NavigationService.pushReplacementNamed(AppRoutes.mainPgae);
           }
           if (state is SplashUnauthenticated) {
             NavigationService.pushReplacementNamed(AppRoutes.login);

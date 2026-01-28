@@ -16,9 +16,9 @@ part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final authRepository = AuthRepository();
+  final AuthRepository authRepository;
 
-  LoginBloc() : super(LoginState()) {
+  LoginBloc( this.authRepository) : super(LoginState()) {
     on<LoginUserEvent>((event, emit) async {
       emit(state.copyWith(isLoading: true));
       try {
@@ -26,21 +26,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           email: event.email,
           password: event.password,
         );
-        emit(state.copyWith(dataLogin: responseLogin.data));
-        emit(state.copyWith(isLoading: false));
-        sl<AppPreferences>().saveToken(token: responseLogin.token);
-        NavigationService.pushReplacementNamed(AppRoutes.profile);
+        emit(state.copyWith(dataLogin: responseLogin.data, isLoading: false));
+        sl<AppPreferences>().saveLoginData(
+          token: responseLogin.token,
+          email: event.email,
+          password: event.password,
+        );
+        NavigationService.pushReplacementNamed(AppRoutes.mainPgae);
       } on ApiException catch (e) {
-        emit(state.copyWith(isLoading: false));
+        emit(state.copyWith(isLoading: false, errorMessage: e.message));
         AppNotifier.showError("${e.statusCode} : ${e.message}");
       } catch (e) {
-        emit(state.copyWith(isLoading: false));
-        AppNotifier.showError("aaaas".toString());
+        emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
+        AppNotifier.showError("$e".toString());
 
         print(e.toString());
       }
-
-      // TODO: implement event handler
     });
   }
 }

@@ -3,7 +3,9 @@ import 'package:my_clean_code_template/core/network/dio_client.dart';
 import 'package:my_clean_code_template/data/model/login_model.dart';
 
 class AuthRepository {
-  final dioClient = sl<DioClient>();
+  final DioClient dioClient;
+
+  AuthRepository({required this.dioClient});
 
   Future<dynamic> login({
     required String email,

@@ -12,6 +12,8 @@ class AppPreferences {
   // ======================
   static const _keyIsLogin = 'is_login';
   static const _keyToken = 'token';
+  static const _keyEmail = 'email';
+  static const _keyPassword = 'password';
   static const _keyProfile = 'profile';
 
   // ======================
@@ -26,11 +28,20 @@ class AppPreferences {
   // ======================
   // AUTH DATA
   // ======================
-  Future<void> saveToken({required String token}) async {
+  Future<void> saveLoginData({
+    required String token,
+    required String email,
+    required String password,
+  }) async {
+
     await _prefs.setString(_keyToken, token);
+    await _prefs.setString(_keyEmail, email);
+    await _prefs.setString(_keyPassword, password);
   }
 
   String get token => _prefs.getString(_keyToken) ?? '';
+  String get email => _prefs.getString(_keyEmail) ?? '';
+  String get password => _prefs.getString(_keyPassword) ?? '';
 
   // ======================
   // PROFILE (OBJECT)
