@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:my_clean_code_template/core/di/service_locator.dart';
 import 'package:my_clean_code_template/core/network/api_exception.dart';
+import 'package:my_clean_code_template/core/usecase/profile_usecase.dart';
 import 'package:my_clean_code_template/core/widget/app_notifier.dart';
 import 'package:my_clean_code_template/data/model/profile_model.dart';
 import 'package:my_clean_code_template/data/repository/profile_repository.dart';
@@ -13,7 +14,7 @@ part 'profile_state.dart';
 //   ProfileCubit() : super(ProfileState());
 
 //   final data = sl<AppPreferences>().profile;
-  
+
 //   final profileRepository = ProfileRepository();
 
 //   Future<void> getProfile() async {
@@ -51,29 +52,25 @@ part 'profile_state.dart';
 // }
 
 class ProfileCubit extends Cubit<ProfileState> {
-  final ProfileRepository repository;
+  final ProfileUsecase usecase;
 
-  ProfileCubit(this.repository) : super(ProfileState());
+  ProfileCubit(this.usecase) : super(ProfileState());
 
   Future<void> loadProfile() async {
     emit(state.copyWith(isLoading: true));
 
     // 1️⃣ tampilkan cache dulu (kalau ada)
-    final cached = repository.getProfileFromCache();
+    final cached = usecase.fetchProfileChaced();
     if (cached != null) {
       emit(state.copyWith(profileData: cached));
     }
 
     // 2️⃣ fetch dari API
     try {
-      final profile = await repository.getProfile();
+      final profile = await usecase.fetchProfile();
       emit(state.copyWith(profileData: profile, isLoading: false));
     } on ApiException catch (e) {
-      emit(state.copyWith(
-        isLoading: false,
-        errorMessage: e.message,
-      ));
+      emit(state.copyWith(isLoading: false, errorMessage: e.message));
     }
   }
 }
-

@@ -4,17 +4,15 @@ import 'package:image_picker/image_picker.dart';
 import 'package:my_clean_code_template/core/network/auth_interceptor.dart';
 import 'package:my_clean_code_template/core/network/dio_client.dart';
 import 'package:my_clean_code_template/core/usecase/detail_lowongan_usecase.dart';
-import 'package:my_clean_code_template/core/usecase/scan_ktp_usecase.dart';
+import 'package:my_clean_code_template/core/usecase/profile_usecase.dart';
 import 'package:my_clean_code_template/data/repository/auth_repository.dart';
 import 'package:my_clean_code_template/data/repository/detail_lowongan_repository.dart';
 import 'package:my_clean_code_template/data/repository/home_repository.dart';
-import 'package:my_clean_code_template/data/repository/ktp_repository.dart';
 import 'package:my_clean_code_template/data/repository/profile_repository.dart';
 import 'package:my_clean_code_template/data/storage/app_shared.dart';
 import 'package:my_clean_code_template/ui/auth/login/bloc/login_bloc.dart';
 import 'package:my_clean_code_template/ui/detail_lowongan/cubit/detail_lowongan_cubit.dart';
 import 'package:my_clean_code_template/ui/home/bloc/home_bloc.dart';
-import 'package:my_clean_code_template/ui/ktp_scan/cubit/ktp_cubit.dart';
 import 'package:my_clean_code_template/ui/profile/cubit/profile_cubit.dart';
 import 'package:my_clean_code_template/ui/splash_screen/cubit/splash_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,7 +37,6 @@ Future<void> setupServiceLocator() async {
 
   homeRegister();
   authRegister();
-  setupInjector();
   detailLowonganInit();
 
   // ======================
@@ -55,10 +52,13 @@ void homeRegister() {
 }
 
 void authRegister() {
-  sl.registerFactory<ProfileCubit>(() => ProfileCubit(sl<ProfileRepository>()));
+  sl.registerFactory<ProfileCubit>(() => ProfileCubit(sl<ProfileUsecase>()));
 
   sl.registerLazySingleton<ProfileRepository>(
     () => ProfileRepository(sl<DioClient>(), sl<AppPreferences>()),
+  );
+  sl.registerLazySingleton<ProfileUsecase>(
+    () => ProfileUsecase(repo: sl<ProfileRepository>()),
   );
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepository(dioClient: sl<DioClient>()),
@@ -76,18 +76,4 @@ void detailLowonganInit() {
   sl.registerFactory<DetailLowonganCubit>(
     () => DetailLowonganCubit(sl<DetailLowonganUsecase>()),
   );
-}
-
-void setupInjector() {
-  // external
-  sl.registerLazySingleton(() => ImagePicker());
-
-  // repository
-  sl.registerLazySingleton(() => KtpRepository(sl()));
-
-  // usecase
-  sl.registerLazySingleton(() => ScanKtpUseCase(sl()));
-
-  // cubit
-  sl.registerFactory(() => KtpCubit(sl()));
 }
