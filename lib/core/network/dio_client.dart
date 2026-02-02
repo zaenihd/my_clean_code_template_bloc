@@ -1,26 +1,30 @@
 import 'package:dio/dio.dart';
 import 'package:my_clean_code_template/core/const/api_const.dart';
-import 'auth_interceptor.dart';
+import 'package:my_clean_code_template/data/storage/app_shared.dart';
 import 'api_exception.dart';
 
 class DioClient {
   final Dio _dio;
+  final AppPreferences prefs;
 
-  DioClient(AuthInterceptor authInterceptor)
+  DioClient({String? token, required this.prefs})
     : _dio = Dio(
         BaseOptions(
           baseUrl: ApiConstant.baseUrl,
           connectTimeout: ApiConstant.connectTimeout,
           receiveTimeout: ApiConstant.receiveTimeout,
-          headers: const {'Accept': 'application/json'},
+          headers: {
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ${prefs.token}',
+          },
         ),
       ) {
-    _dio.interceptors.add(authInterceptor);
     _dio.interceptors.add(
       LogInterceptor(requestBody: true, responseBody: true),
     );
   }
 
+  // GET
   Future<Response> get(
     String path, {
     Map<String, dynamic>? queryParameters,
@@ -32,6 +36,7 @@ class DioClient {
     }
   }
 
+  // POST
   Future<Response> post(
     String path, {
     dynamic data,
@@ -48,6 +53,7 @@ class DioClient {
     }
   }
 
+  // PUT
   Future<Response> put(String path, {dynamic data}) async {
     try {
       return await _dio.put(path, data: data);

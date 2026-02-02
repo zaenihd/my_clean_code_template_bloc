@@ -27,11 +27,13 @@ Future<void> setupServiceLocator() async {
 
   // ======================
   // CORE
-  sl.registerLazySingleton<DioClient>(() => DioClient(sl()));
   sl.registerLazySingleton<AppPreferences>(() => AppPreferences(prefs));
   sl.registerLazySingleton<AuthInterceptor>(() => AuthInterceptor(sl()));
   sl.registerLazySingleton<SplashCubit>(
     () => SplashCubit(sl(), sl<AuthRepository>()),
+  );
+  sl.registerLazySingleton<DioClient>(
+    () => DioClient(prefs: sl<AppPreferences>()),
   );
   // ======================
 
